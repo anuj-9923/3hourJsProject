@@ -1,6 +1,9 @@
 var manu = document.getElementById('manu');
 var itemList = document.getElementById('items');
 var table = document.getElementById('table-list');
+var itemList1 = document.getElementById('item1');
+var itemList2 = document.getElementById('item2');
+var itemList3 = document.getElementById('item3');
 console.log(table);
 
 var manuList = {
@@ -10,7 +13,9 @@ var manuList = {
 }
 
 manu.addEventListener('submit', addedOrder);
-itemList.addEventListener('click', removeItem);
+itemList1.addEventListener('click', removeItem);
+itemList2.addEventListener('click', removeItem);
+itemList3.addEventListener('click', removeItem);
 
 
 function addedOrder(e) {
@@ -54,8 +59,8 @@ window.addEventListener('DOMContentLoaded', () => {
         .then(response => {
             for (var i = 0; i < response.data.length; i++) {
                 var li = document.createElement('li');
-                var data = response.data[i].price + ' ' +
-                    response.data[i].dish + ' ' + response.data[i].table + ' ';
+                var data = response.data[i].price + '-' +
+                    response.data[i].dish + '-' + response.data[i].table + ' ';
                 li.appendChild(document.createTextNode(data));
                 var deleteBtn = document.createElement('Button');
                 deleteBtn.className = 'delete';
@@ -82,17 +87,43 @@ window.addEventListener('DOMContentLoaded', () => {
 
 })
 function removeItem(e) {
-    var itemList = document.getElementById('item1');
-    if (e.target.classList.contains('Delete Order')) {
+    if (e.target.classList.contains('delete')) {
         if (confirm('Are you sure')) {
             var li = e.target.parentElement;
             //itemList.removeChild(li);
             itemList1.removeChild(li);
             //console.log(li);
             var chis = li.children[0];
-            // console.log(chis.id);
+            console.log(chis.id);
             axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
 
         }
+
+    }
+    if (e.target.classList.contains('delete')) {
+        if (confirm('Are you sure')) {
+            var li2 = e.target.parentElement;
+            //itemList.removeChild(li);
+            itemList2.removeChild(li2);
+            //console.log(li);
+            var chis = li2.children[0];
+            console.log(chis.id);
+            axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
+
+        }
+
+    }
+    if (e.target.classList.contains('delete')) {
+        if (confirm('Are you sure')) {
+            var li = e.target.parentElement;
+            //itemList.removeChild(li);
+            itemList3.removeChild(li);
+            //console.log(li);
+            var chis = li.children[0];
+            console.log(chis.id);
+            axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
+
+        }
+
     }
 }
