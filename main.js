@@ -25,7 +25,7 @@ function addedOrder(e) {
     manuList.dish = document.getElementById('dish').value;
     manuList.table = document.getElementById('table').value;
     var orderDetail = '' + manuList.price + ' ' + manuList.dish + ' ' + manuList.table + ' ';
-    axios.post('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu', manuList)
+    axios.post('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu', manuList)
         .then(response => {
             console.log(manuList);
         })
@@ -55,7 +55,7 @@ function addedOrder(e) {
     console.log(itemList);
 }
 window.addEventListener('DOMContentLoaded', () => {
-    axios.get('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu', manuList._id)
+    axios.get('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu', manuList._id)
         .then(response => {
             for (var i = 0; i < response.data.length; i++) {
                 var li = document.createElement('li');
@@ -87,43 +87,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
 })
 function removeItem(e) {
+    var itemList = document.getElementById('items');
     if (e.target.classList.contains('delete')) {
+        var table = document.getElementById('table-list');
         if (confirm('Are you sure')) {
             var li = e.target.parentElement;
-            //itemList.removeChild(li);
-            itemList1.removeChild(li);
-            //console.log(li);
+            li.remove();
             var chis = li.children[0];
             console.log(chis.id);
-            axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
+            axios.delete('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu/' + chis.id);
 
         }
 
     }
-    if (e.target.classList.contains('delete')) {
-        if (confirm('Are you sure')) {
-            var li2 = e.target.parentElement;
-            //itemList.removeChild(li);
-            itemList2.removeChild(li2);
-            //console.log(li);
-            var chis = li2.children[0];
-            console.log(chis.id);
-            axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
 
-        }
-
-    }
-    if (e.target.classList.contains('delete')) {
-        if (confirm('Are you sure')) {
-            var li = e.target.parentElement;
-            //itemList.removeChild(li);
-            itemList3.removeChild(li);
-            //console.log(li);
-            var chis = li.children[0];
-            console.log(chis.id);
-            axios.delete('https://crudcrud.com/api/ef39aa77e45d41d48eae4e8ae9928ab6/orderManu/' + chis.id);
-
-        }
-
-    }
 }
