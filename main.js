@@ -93,9 +93,9 @@ function removeItem(e) {
         if (confirm('Are you sure')) {
             var li = e.target.parentElement;
             li.remove();
-            var chis = li.children[0];
-            console.log(chis.id);
-            axios.delete('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu/' + chis.id);
+            var idNo = li.children[0];
+            console.log(idNo.id);
+            axios.delete('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu/' + idNo.id);
 
         }
 
