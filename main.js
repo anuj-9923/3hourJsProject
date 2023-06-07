@@ -1,12 +1,9 @@
 var manu = document.getElementById('manu');
-var itemList = document.getElementById('items');
-var table = document.getElementById('table-list');
 var itemList1 = document.getElementById('item1');
 var itemList2 = document.getElementById('item2');
 var itemList3 = document.getElementById('item3');
-console.log(table);
 
-var manuList = {
+var Order = {
     price: '',
     dish: '',
     table: ''
@@ -17,88 +14,73 @@ itemList1.addEventListener('click', removeItem);
 itemList2.addEventListener('click', removeItem);
 itemList3.addEventListener('click', removeItem);
 
+async function addedOrder(e) {
+    try {
+        e.preventDefault();
+        Order.price = document.getElementById('price').value;
+        Order.dise = document.getElementById('dish').value;
+        Order.table = document.getElementById('table').value;
+        const postData = await axios.post('https://crudcrud.com/api/95f4a4a1206b413fb0b4ecc30b325b59/orderManu', Order);
+        addOrder(postData.data);
 
-function addedOrder(e) {
-    e.preventDefault();
+    } catch (err) {
+        console.log(err);
+    }
+}
+function addOrder(postData) {
     var li = document.createElement('li');
-    manuList.price = document.getElementById('price').value;
-    manuList.dish = document.getElementById('dish').value;
-    manuList.table = document.getElementById('table').value;
-    var orderDetail = '' + manuList.price + ' ' + manuList.dish + ' ' + manuList.table + ' ';
-    axios.post('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu', manuList)
-        .then(response => {
-            console.log(manuList);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
+    console.log(postData._id);
+    var orderDetail = postData.price + '-' + postData.dise + '-' + postData.table + ' ';
+    li.id = postData._id;
     li.appendChild(document.createTextNode(orderDetail));
-    //console.log(li);
-
-    var deleteBtn = document.createElement('Button');
-    deleteBtn.className = 'delete';
-    deleteBtn.innerHTML = 'Delete Order';
-    li.appendChild((deleteBtn));
-    //console.log(li);
-
-    if (manuList.table === 'table1') {
-        var itemList1 = document.getElementById('item1');
+    li.appendChild(deleteBtn(postData));
+    console.log(li);
+    if (postData.table === 'table1') {
         itemList1.appendChild(li);
-    } else if (manuList.table === 'table2') {
-        var itemList2 = document.getElementById('item2');
+    } else if (postData.table === 'table2') {
         itemList2.appendChild(li);
     } else {
-        var itemList3 = document.getElementById('item3');
         itemList3.appendChild(li);
     }
-    console.log(itemList);
 }
-window.addEventListener('DOMContentLoaded', () => {
-    axios.get('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu', manuList._id)
-        .then(response => {
-            for (var i = 0; i < response.data.length; i++) {
-                var li = document.createElement('li');
-                var data = response.data[i].price + '-' +
-                    response.data[i].dish + '-' + response.data[i].table + ' ';
-                li.appendChild(document.createTextNode(data));
-                var deleteBtn = document.createElement('Button');
-                deleteBtn.className = 'delete';
-                deleteBtn.innerHTML = 'Delete Order';
-                deleteBtn.id = response.data[i]._id;
-                li.appendChild((deleteBtn));
-                if (response.data[i].table === 'table1') {
-                    var itemList1 = document.getElementById('item1');
-                    itemList1.appendChild(li);
-                } else if (response.data[i].table === 'table2') {
-                    var itemList2 = document.getElementById('item2');
-                    itemList2.appendChild(li);
-                } else {
-                    var itemList3 = document.getElementById('item3');
-                    itemList3.appendChild(li);
-                }
-                //console.log(itemList);
-            }
-        })
-        .catch((err) => {
-            console.log(err);
-        })
 
-
-})
-function removeItem(e) {
-    var itemList = document.getElementById('items');
-    if (e.target.classList.contains('delete')) {
-        var table = document.getElementById('table-list');
-        if (confirm('Are you sure')) {
-            var li = e.target.parentElement;
-            li.remove();
-            var idNo = li.children[0];
-            console.log(idNo.id);
-            axios.delete('https://crudcrud.com/api/698881d33cb147a0a8368bd2b7cb04e6/orderManu/' + idNo.id);
+function deleteBtn(postData) {
+    var delBtn = document.createElement('Button');
+    delBtn.className = 'delete';
+    delBtn.id = postData._id;
+    delBtn.innerHTML = 'Delete Order';
+    if (delBtn.onclick === delBtn.classList.contains('delete')) {
+        removeItem();
+    }
+    return delBtn;
+}
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await axios.get('https://crudcrud.com/api/95f4a4a1206b413fb0b4ecc30b325b59/orderManu');
+        console.log(response.data);
+        for (let i = 0; i < response.data.length; i++) {
+            addOrder(response.data[i]);
 
         }
 
+    } catch (err) {
+        console.log(err);
     }
+})
 
+async function removeItem(e) {
+    try {
+        if (e.target.classList.contains('delete')) {
+            if (confirm('Are you sure')) {
+                var li = e.target.parentElement;
+                var idNo = li.id;
+                li.remove();
+                console.log(idNo);
+                const deleteData = await axios.delete('https://crudcrud.com/api/95f4a4a1206b413fb0b4ecc30b325b59/orderManu/' + idNo);
+                console.log(deleteData);
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
 }
